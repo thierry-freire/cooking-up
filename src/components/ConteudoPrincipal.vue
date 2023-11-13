@@ -20,6 +20,10 @@
             {{ ingrediente }}
         </li>
       </ul>
+
+      <p class="paragrafo lista-vazia">
+        <img src="../assets/imagens/icones/lista-vazia.svg" alt="Ícone de pesquisa">
+      </p>
     </section>
   </main>
 </template>
