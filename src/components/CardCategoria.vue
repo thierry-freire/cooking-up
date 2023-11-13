@@ -56,7 +56,7 @@
         font-weight: 700;
     }
 
-        .categoria__ingredientes {
+    .categoria__ingredientes {
         display: flex;
         justify-content: center;
         gap: 0.5rem;
