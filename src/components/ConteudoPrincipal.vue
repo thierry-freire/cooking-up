@@ -1,11 +1,14 @@
 <script lang="ts">
+    import SelecionarIngredientes from './SelecionarIngredientes.vue';
+
     export default {
-        data() {
-            return {
-                ingredientes: ['Alho', 'Manteiga', 'Orégano']
-            };
-        },
-    }
+    data() {
+        return {
+            ingredientes: []
+        };
+    },
+    components: { SelecionarIngredientes }
+}
 </script>
 
 <template>
@@ -22,9 +25,11 @@
       </ul>
 
       <p v-else class="paragrafo lista-vazia">
-        <img src="../assets/imagens/icones/lista-vazia.svg" alt="Ícone de pesquisa">
+        <img src="@/assets/imagens/icones/lista-vazia.svg" alt="Ícone de pesquisa">
       </p>
     </section>
+
+    <SelecionarIngredientes />
   </main>
 </template>
 
