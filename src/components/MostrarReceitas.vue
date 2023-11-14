@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import BotaoPrincipal from './BotaoPrincipal.vue';
-import Receita from './Receita.vue';
+import CardReceita from './CardReceita.vue';
 import type { IReceita } from '@/interfaces/IReceita';
 import { obterReceitas } from '@/http';
 
@@ -9,38 +9,48 @@ import { obterReceitas } from '@/http';
         props: {
             ingredientes: { type: Object as PropType<string>}
         },
-        components: { BotaoPrincipal, Receita },
+        components: { BotaoPrincipal, CardReceita },
         emits: ['buscarReceitas'],
         data() {
             return {
-                receitas: [] as IReceita[]
+                receitasEncontradas: [] as IReceita[]
             }
         },
         async created() {
-            this.receitas = await obterReceitas();
+            const receitas = await obterReceitas();
+
+            this.receitasEncontradas = receitas;
         }
     }
 </script>
 
 <template>
-    <section class="selecionar-receitas">
+    <section class="mostrar-receitas">
         <h1 class="cabecalho titulo-receitas">Receitas</h1>
 
-        <h2 class="sub-titulo">Resultados encontrados: {{ receitas.length }}</h2>
-
-        <p v-if="receitas.length" class="paragrafo-lg instrucoes">
-            Veja as opções de receitas que encontramos com os ingredientes que você tem por aí!
+        <p class="paragrafo-lg resultados-encontrados">
+            Resultados encontrados: {{ receitasEncontradas.length }}
         </p>
 
-        <p v-else class="paragrafo-lg instrucoes">
-            Ops, não encontramos resultados para sua combinação. Vamos tentar de novo?
-        </p>
+        <div v-if="receitasEncontradas.length" class="receitas-wrapper">
+            <p class="paragrafo-lg informacoes">
+                Veja as opções de receitas que encontramos com os ingredientes que você tem por aí!
+            </p>
+
+            <ul class="receitas">
+                <li v-for="receita of receitasEncontradas" :key="receita.nome">
+                    <CardReceita :receita="receita" />
+                </li>
+            </ul>
+        </div>
     
-        <ul v-if="receitas.length" class="receitas">
-            <li v-for="receita in receitas" :key="receita.nome">
-                <Receita :receita="receita"/>
-            </li>
-        </ul>
+        <div v-else class="receitas-nao-encontradas">
+            <p class="paragrafo-lg receitas-nao-encontradas__info">
+                Ops, não encontramos resultados para sua combinação. Vamos tentar de novo?
+            </p>
+
+            <img src="../assets/imagens/sem-receitas.png" alt="Desenho de um ovo quebrado. A gema tem um rosto com uma expressão triste.">
+        </div>
     
         <p v-else class="paragrafo lista-vazia">
             <img src="@/assets/imagens/sem-receitas.png" alt="Sem receitas">
@@ -51,44 +61,49 @@ import { obterReceitas } from '@/http';
 </template>
 
 <style scoped>
-    .sub-titulo {
+    .mostrar-receitas {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
-        color: var(--verde-medio, #3D6D4A);
-        font-weight: 700;
     }
 
     .titulo-receitas {
         color: var(--verde-medio, #3D6D4A);
-        display: block;
         margin-bottom: 1.5rem;
     }
 
+    .resultados-encontrados {
+        color: var(--verde-medio, #3D6D4A);
+        margin-bottom: 0.5rem;
+    }
+
+    .receitas-wrapper {
+        margin-bottom: 3.5rem;
+    }
+
+    .informacoes {
+        margin-bottom: 2rem;
+    }
+
     .receitas {
-        margin-bottom: 1rem;
         display: flex;
         justify-content: center;
         gap: 1.5rem;
         flex-wrap: wrap;
     }
 
-    .selecionar-receitas {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .instrucoes {
+    .receitas-nao-encontradas {
         margin-bottom: 2rem;
     }
 
-    .lista-vazia {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.25rem;
+    .receitas-nao-encontradas__info {
+    margin-bottom: 0.5rem;
+    }
 
-        color: var(--coral, #F0633C);
-        text-align: center;
+    @media only screen and (max-width: 767px) {
+        .receitas-wrapper {
+            margin-bottom: 2rem;
+        }
     }
 </style>
