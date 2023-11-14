@@ -5,17 +5,18 @@
     import BotaoPrincipal from './BotaoPrincipal.vue';
 
     export default {
-    data() {
-        return {
-            categorias: [] as ICategoria[]
-        };
-    },
-    async created() {
-        this.categorias = await obterCategorias();
-    },
-    components: { CardCategoria, BotaoPrincipal },
-    emits: ['adicionarIngrediente', 'removerIngrediente', 'buscarReceitas']
-}
+        name: 'SelecionarIngredientes',
+        data() {
+            return {
+                categorias: [] as ICategoria[]
+            };
+        },
+        async created() {
+            this.categorias = await obterCategorias();
+        },
+        components: { CardCategoria, BotaoPrincipal },
+        emits: ['adicionarIngrediente', 'removerIngrediente', 'buscarReceitas']
+    }
 </script>
 
 <template>
@@ -33,7 +34,7 @@
         </ul>
 
         <p class="paragrafo dica">
-        *Atenção: consideramos que você tem em casa sal, pimenta e água.
+            *Atenção: consideramos que você tem em casa sal, pimenta e água.
         </p>
 
         <BotaoPrincipal texto="Buscar receitas!" @click="$emit('buscarReceitas')" />

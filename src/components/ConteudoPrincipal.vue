@@ -31,8 +31,10 @@
 <template>
     <main class="conteudo-principal">
         <SuaLista :ingredientes="ingredientes" />
-        <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'" @adicionar-ingrediente="adicionarIgredientes($event)" @remover-ingrediente="removerIgredientes($event)" @buscar-receitas="navegar('MostrarReceitas')"/>
-        <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'" @buscar-receitas="navegar('SelecionarIngredientes')" />
+        <KeepAlive include="SelecionarIngredientes">
+            <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'" @adicionar-ingrediente="adicionarIgredientes($event)" @remover-ingrediente="removerIgredientes($event)" @buscar-receitas="navegar('MostrarReceitas')"/>
+            <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'" :ingredientes="ingredientes" @buscar-receitas="navegar('SelecionarIngredientes')" />
+        </KeepAlive>
     </main>
 </template>
 

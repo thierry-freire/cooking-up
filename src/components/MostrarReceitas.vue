@@ -4,10 +4,11 @@ import BotaoPrincipal from './BotaoPrincipal.vue';
 import CardReceita from './CardReceita.vue';
 import type { IReceita } from '@/interfaces/IReceita';
 import { obterReceitas } from '@/http';
+import { filtrarListas } from '@/operacoes/Listas';
 
     export default {
         props: {
-            ingredientes: { type: Object as PropType<string>}
+            ingredientes: { type: Array as PropType<string[]>, required: true }
         },
         components: { BotaoPrincipal, CardReceita },
         emits: ['buscarReceitas'],
@@ -19,7 +20,11 @@ import { obterReceitas } from '@/http';
         async created() {
             const receitas = await obterReceitas();
 
-            this.receitasEncontradas = receitas;
+            this.receitasEncontradas = receitas.filter((receita) => {
+                const exibir = filtrarListas(receita.ingredientes, this.ingredientes);
+                
+                return exibir;
+            });
         }
     }
 </script>
